@@ -50,12 +50,10 @@ window.desk = {
 			}
 
 		}).error(function(e) {
-			if(e.status === 500) {
-				desk.start("v6");
+			if(![403, 401].includes(parseInt(e.status))) {
+				alert(`${localStorage.server} failed with status ${e.status}`);
 			}
-			else {
-				desk.logout();
-			}
+			desk.logout();
 		});
 	},
 	setup_assets: function() {
@@ -82,13 +80,13 @@ window.desk = {
 
 		// override logout
         frappe.app.redirect_to_login = function() {
-			localStorage.session_id = null;
-        	window.location.href = "index.html";
+			localStorage.removeItem('session_id');
+			window.location = "index.html";
 		}
 	},
 	logout: function() {
-		localStorage.session_id = null;
-		window.location.href = "/index.html"
+		localStorage.removeItem('session_id');
+		window.location = "index.html"
 	}
 }
 
